@@ -1,0 +1,25 @@
+%pdflatex -halt-on-error -aux-directory=tmp -output-directory=tmp rapport.tex%
+
+\documentclass{article}
+\usepackage{amsmath}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[francais]{babel}
+
+\title{Rapport sur le jeu de damme}
+\author{Wassim Saidane, Aurélien Authier}
+\date{}
+
+\begin{document}
+    \pagenumbering{gobble}
+    \maketitle
+    \tableofcontents
+    \newpage
+    \pagenumbering{arabic}
+    \section{Introduction}
+
+    \section{Protocole choisis}
+        Nous avons choisis d'utiliser le protocole TCP car garantit l’émission ainsi que la réception de paquets de données.
+\end{document}
