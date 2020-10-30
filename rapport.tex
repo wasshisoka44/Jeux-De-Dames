@@ -7,12 +7,15 @@
 \usepackage{graphicx}
 \usepackage{hyperref}
 \usepackage[francais]{babel}
+\usepackage{listings}
+
 
 \title{Rapport sur le jeu de damme}
 \author{Wassim Saidane, Aurélien Authier}
 \date{}
 
 \begin{document}
+    \lstset{language=C}
     \pagenumbering{gobble}
     \maketitle
     \tableofcontents
@@ -22,4 +25,68 @@
 
     \section{Protocole choisis}
         Nous avons choisis d'utiliser le protocole TCP car garantit l’émission ainsi que la réception de paquets de données.
+    \section{Implémentation}
+    \subsection{Serveur}
+    Nous avons repris le code du TP5 permettant de d'établir un tchat entres les clients.
+    Le nombre de client est prédéfinit. 
+    \begin{lstlisting}[frame=single]  
+        #define MAX_CLIENTS 2
+    \end{lstlisting}
+    Le client est définit par une structure
+    \begin{lstlisting}
+        typedef struct client_s
+            {
+                struct sockaddr caddr;
+                socklen_t clen;
+                int cs;
+                char buf[BUF_SIZE + 1];
+            } client_t;
+    \end{lstlisting}
+    On définit une liste de client et la taille du message (déplacement du piont du joueurs).
+    \begin{lstlisting}
+        client_t clients[MAX_CLIENTS] = {0};
+        ssize_t msg_len;
+    \end{lstlisting}
+    Le serveur affiche le déplacement du joueur comme ceci
+    \begin{lstlisting}[frame=single]
+        printf("Le joueur %d deplace le pion %s\n",
+         j + 1, clients[j].buf);
+    \end{lstlisting}
+
+    
+    \subsection{Client}
+    On va d'abord définir 3 strings (pion,x,y) : 
+    \begin{lstlisting}
+        char pion[BUF_SIZE + 1];
+        char x[BUF_SIZE + 1];
+        char y[BUF_SIZE + 1];
+        bzero(pion, BUF_SIZE + 1);
+        bzero(x, BUF_SIZE + 1);
+        bzero(y, BUF_SIZE + 1);
+        ssize_t msg_len;
+    \end{lstlisting}
+    pion est le numéro du pion, x et y ses coordonnées.
+    \newpage
+    Ensuite dans une boucle on demande au joueur de choisir le pion à déplacer ainsi que ses nouvelles coordonnées.
+    \begin{lstlisting}
+        while (1)
+        {
+            bzero(pion, BUF_SIZE + 1);
+            printf("Quel pion voulez vous bougez ? : ");
+            fgets(pion, BUF_SIZE, stdin);
+            if (!strlen(pion))
+                break;
+            printf("Vous deplacez le pion %s", pion);
+
+            bzero(x, BUF_SIZE + 1);
+            printf("Nouvelle coordonnee de x : ");
+            fgets(x, BUF_SIZE, stdin);
+
+            bzero(y, BUF_SIZE + 1);
+            printf("Nouvelle coordonnee de y : ");
+            fgets(y, BUF_SIZE, stdin);
+
+            printf("Le pion %s a pour nouvelle coordonnee [%s,%s]", pion, x,y);
+        }
+    \end{lstlisting}
 \end{document}

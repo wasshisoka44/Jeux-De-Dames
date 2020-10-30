@@ -10,7 +10,7 @@
 #include <fcntl.h>
 
 #define BUF_SIZE 256
-#define MAX_CLIENTS 3
+#define MAX_CLIENTS 2
 #define WAIT_MICROS 10000
 
 typedef struct client_s
@@ -88,7 +88,7 @@ int main(int argc, char **argv)
         flags_tmp = fcntl(s, F_GETFL, 0);
         fcntl(s, F_SETFL, flags_tmp | O_NONBLOCK);
 
-        puts("Clients found ! Chat session can begin.");
+        puts("Players found ! Game session can begin.");
 
         while (1)
         {
@@ -108,7 +108,7 @@ int main(int argc, char **argv)
                         return (0);
                     }
 
-                    printf("client %d => %s [length : %zd]\n", j, clients[j].buf, msg_len);
+                    printf("Le joueur %d déplace le pion %s\n", j + 1, clients[j].buf);
                     for (int k = 0; k < MAX_CLIENTS; k++)
                     {
                         if (k != j)

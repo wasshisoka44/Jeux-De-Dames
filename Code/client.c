@@ -9,7 +9,7 @@
 #include <errno.h>
 
 #define BUF_SIZE 256
-#define CLIENT_PORT 12346
+#define CLIENT_PORT 1234
 
 int main(int argc, char **argv)
 {
@@ -62,35 +62,48 @@ int main(int argc, char **argv)
     }
 
     // Msg buffer
-    char buf[BUF_SIZE + 1];
-    bzero(buf, BUF_SIZE + 1);
+    char pion[BUF_SIZE + 1];
+    char x[BUF_SIZE + 1];
+    char y[BUF_SIZE + 1];
+    bzero(pion, BUF_SIZE + 1);
+    bzero(x, BUF_SIZE + 1);
+    bzero(y, BUF_SIZE + 1);
     ssize_t msg_len;
+
+    
 
     while (1)
     {
-        bzero(buf, BUF_SIZE + 1);
-        printf("Message: ");
-        fgets(buf, BUF_SIZE, stdin);
-        if (!strlen(buf))
+        bzero(pion, BUF_SIZE + 1);
+        printf("Quel pion voulez vous bougez ? : ");
+        fgets(pion, BUF_SIZE, stdin);
+        if (!strlen(pion))
             break;
+        printf("Vous déplacez le pion %s", pion);
+
+        bzero(x, BUF_SIZE + 1);
+        printf("Nouvelle coordonnée de x : ");
+        fgets(x, BUF_SIZE, stdin);
+
+        bzero(y, BUF_SIZE + 1);
+        printf("Nouvelle coordonnée de y : ");
+        fgets(y, BUF_SIZE, stdin);
+
+        printf("Le pion %s a pour nouvelle coordonnée [%s,%s]", pion, x,y);
         // Send input stream
-        msg_len = send(s, (void *)buf, strlen(buf), 0);
+        msg_len = send(s, (void *)pion, strlen(pion), 0);
         if (msg_len < 0)
         {
             dprintf(2, "Send failed : %s\n", strerror(errno));
             close(s);
             exit(1);
         }
-        printf("sent => %s [length : %zd]\n", buf, msg_len);
         // Receive server response
-        if ((msg_len = recv(s, (void *)buf, BUF_SIZE, 0)) <= 0)
+        if ((msg_len = recv(s, (void *)pion, BUF_SIZE, 0)) <= 0)
         {
             printf("Server offline : %s\n", strerror(errno));
         }
-        else
-        {
-            printf("received => %s [length : %zd]\n", buf, msg_len);
-        }
+        printf("\n");
     }
     puts("Connection ended");
     close(s);
