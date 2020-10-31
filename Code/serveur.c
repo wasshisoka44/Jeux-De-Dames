@@ -1,134 +1,79 @@
-#include <netinet/ip.h>
-#include <arpa/inet.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#include <unistd.h>
 #include <stdio.h>
-#include <string.h>
+#include <time.h>
 #include <stdlib.h>
-#include <errno.h>
-#include <fcntl.h>
+#include <unistd.h>
+#include <string.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include "dame.h"
 
-#define BUF_SIZE 256
-#define MAX_CLIENTS 2
-#define WAIT_MICROS 10000
-
-typedef struct client_s
+int main(int argc, char *argv[])
 {
-    struct sockaddr caddr;
-    socklen_t clen;
-    int cs;
-    char buf[BUF_SIZE + 1];
-} client_t;
+    int sockfd, len, connfd[2], plateau[TAILLE * TAILLE];
+    Pion p;
 
-int main(int argc, char **argv)
-{
+    struct sockaddr_in servaddr, cliaddr;
+
     if (argc != 2)
     {
-        puts("usage : ./tcp_serv3 [port]");
-        exit(1);
+        printf("Il faut un port\n");
+        return 0;
     }
 
-    int s = socket(AF_INET, SOCK_STREAM, 0);
-
-    int flags_tmp;
-
-    if (s < 0)
+    //création de socket
+    if ((sockfd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
     {
-        dprintf(2, "Socket failed\n");
-        exit(1);
+        perror("Erreur : Socket");
+        exit(-1);
     }
-    
 
-    struct sockaddr_in sin;
-    sin.sin_family = AF_INET;
-    sin.sin_port = htons((unsigned short)atol(argv[1]));
-    sin.sin_addr.s_addr = htonl(INADDR_ANY);
+    servaddr.sin_family = AF_INET; // IPv4
+    servaddr.sin_addr.s_addr = INADDR_ANY;
+    servaddr.sin_port = htons(atoi(argv[1]));
 
-    for (int i = 0; i < 8; i++)
+    //lie la socket à l'adresse IP
+    if (bind(sockfd, (const struct sockaddr *)&servaddr, sizeof(servaddr)) < 0)
     {
-        sin.sin_zero[i] = 0;
+        perror("Erreur : Socket");
+        exit(-1);
     }
 
-    if (bind(s, (struct sockaddr *)&sin, sizeof(struct sockaddr_in)) < 0)
+    //serveur écoute
+    if ((listen(sockfd, 1)) != 0)
     {
-        dprintf(2, "Bind failed\n");
-        exit(1);
+        printf("Erreur \n");
+        exit(0);
     }
+    printf("Le serveur fonctionne...\n");
 
-    if (listen(s, 5) < 0)
+    len = sizeof(cliaddr);
+
+    //accepte le client
+    for (int i = 0; i < 2; i++)
     {
-        dprintf(2, "Listen failed\n");
-        exit(1);
+        if ((connfd[i] = accept(sockfd, (struct sockaddr *)&cliaddr, &len)) < 0)
+        {
+            printf("Connection avec le client échouer\n");
+            exit(0);
+        }
+        else
+            printf("Le joueur %d vient de se connecter\n", i + 1);
     }
 
-    client_t clients[MAX_CLIENTS] = {0};
-    ssize_t msg_len;
+    char buf[100] = "Quel pion voulez vous déplacer ? ";
 
+    init_game(plateau);
     while (1)
     {
-
-        flags_tmp = fcntl(s, F_GETFL, 0);
-        fcntl(s, F_SETFL, flags_tmp & ~O_NONBLOCK);
-
-        for (int i = 0; i < MAX_CLIENTS; i++)
+        for (int i = 0; i < 2; i++)
         {
-            printf("Waiting for client %d...\n", i + 1);
-
-            if ((clients[i].cs = accept(s, &(clients[i].caddr), &(clients[i].clen))) < 0)
-            {
-                dprintf(2, "Client acceptation failed\n");
-                exit(1);
-            }
-
-            flags_tmp = fcntl(clients[i].cs, F_GETFL, 0);
-            fcntl(clients[i].cs, F_SETFL, flags_tmp | O_NONBLOCK);
-        }
-
-        flags_tmp = fcntl(s, F_GETFL, 0);
-        fcntl(s, F_SETFL, flags_tmp | O_NONBLOCK);
-
-        puts("Players found ! Game session can begin.");
-
-        while (1)
-        {
-            for (int j = 0; j < MAX_CLIENTS; j++)
-            {
-                bzero(clients[j].buf, BUF_SIZE + 1);
-                if ((msg_len = recv(clients[j].cs, (void *)clients[j].buf, BUF_SIZE, 0)) >= 0)
-                {
-                    if (msg_len == 0)
-                    {
-                        printf("Client %d disconnected (%s), the server will close.", j + 1, strerror(errno));
-                        for (int l = 0; l < MAX_CLIENTS; l++)
-                        {
-                            close(clients[l].cs);
-                        }
-                        close(s);
-                        return (0);
-                    }
-
-                    printf("Le joueur %d déplace le pion %s\n", j + 1, clients[j].buf);
-                    for (int k = 0; k < MAX_CLIENTS; k++)
-                    {
-                        if (k != j)
-                        {
-                            if (send(clients[k].cs, clients[j].buf, msg_len, 0) < 0)
-                            {
-                                printf("Client %d lost connection (%s), the server will close.", k + 1, strerror(errno));
-                                for (int l = 0; l < MAX_CLIENTS; l++)
-                                {
-                                    close(clients[l].cs);
-                                }
-                                close(s);
-                                return (0);
-                            }
-                        }
-                    }
-                }
-            }
-
-            usleep(WAIT_MICROS);
+            write(connfd[i], (const char *)&plateau, sizeof(plateau));
+            printf("Le Joueur %d dépalce un piont\n", i + 1);
+            write(connfd[i], (const char *)&buf, sizeof(buf));
+            recv(connfd[i], &p, sizeof(p), 0);
+            printf("Le joueur %d à déplacer le pion :\n x : %d\ny : %d\n", i + 1, p.x, p.y);
         }
     }
+    close(sockfd);
+    return 0;
 }

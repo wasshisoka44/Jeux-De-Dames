@@ -1,10 +1,9 @@
 # Jeu de dames
 ## A faire 
 ### Serveur 
-- [ ] Création du serveur (en cours)
+- [ ] Création du serveur
   - [x] Détecte les clients
   - [x] Affiche quel pion est déplacé par quel joueur
-  - [ ] Affiche le plateau (en cours)
 - [ ] Connexion / Authentification
 - [ ] Mise en relations de joueurs 
 - [ ] Gestion des parties 
@@ -12,7 +11,9 @@
 ### Client 
 - [x] Création du client
   - [x] Demande au joueur le pion à déplacer 
-  - [x] Demande au joueur les nouvelles coordonnées x et y
+  - [x] Affiche le plateau
+  - [ ] Demande au joueur les nouvelles coordonnées x et y (en cours)
+  - [ ] Dépalce le pion  
 - [ ] Connexion / Création de comptes 
 - [ ] Choix d’une partie 
 - [ ] Gestion  d’une  partie.

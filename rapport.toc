@@ -4,3 +4,4 @@
 \contentsline {section}{\numberline {3}Implémentation}{1}{section.3}% 
 \contentsline {subsection}{\numberline {3.1}Serveur}{1}{subsection.3.1}% 
 \contentsline {subsection}{\numberline {3.2}Client}{1}{subsection.3.2}% 
+\contentsline {subsection}{\numberline {3.3}Le jeu}{1}{subsection.3.3}% 

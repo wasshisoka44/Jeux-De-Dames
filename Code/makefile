@@ -1,18 +1,15 @@
 CC=gcc
 CFLAGS=
 LDFLAGS=
-EXEC=dame serveur client
+EXEC=serveur client
 
 all: $(EXEC)
 
-serveur: serveur.o
-	$(CC) -o $@ $^ $(LDFLAGS) -lm
+serveur: serveur.o dame.o
+	$(CC) -Wall -o $@ $^ $(LDFLAGS) -lm
 
-client: client.o
-	$(CC) -o $@ $^ $(LDFLAGS) -lm
-
-dame: dame.o
-	$(CC) -o $@ $^ $(LDFLAGS) -lm
+client: client.o dame.o
+	$(CC) -Wall -o $@ $^ $(LDFLAGS) -lm
 
 %.o: %.c
 	$(CC) -o $@ -c $< $(CFLAGS) -lm
