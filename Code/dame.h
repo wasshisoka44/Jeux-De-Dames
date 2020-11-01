@@ -27,9 +27,6 @@ typedef enum
 
 void init_game(int plateau[]);
 Pion choisir_case();
-Booleen verif_coup(int plateau[], Pion p, Pion p_dest);
-void jouer_coup(int  plateau[], int joueur);
-Booleen game_over(int plateau[]);
 void afficher_plateau(int plateau[]);
 
 static int nb_noir = 20;

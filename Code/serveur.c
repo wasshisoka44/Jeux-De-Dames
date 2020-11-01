@@ -60,7 +60,7 @@ int main(int argc, char *argv[])
             printf("Le joueur %d vient de se connecter\n", i + 1);
     }
 
-    char buf[100] = "Quel pion voulez vous déplacer ? ";
+    char buf[100] = "A vous de jouez : ";
 
     init_game(plateau);
     while (1)

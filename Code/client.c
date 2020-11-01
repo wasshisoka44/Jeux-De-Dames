@@ -43,10 +43,7 @@ int main(int argc, char *argv[])
         afficher_plateau(plateau);
         recv(sockfd, &message, sizeof(message), 0);
         printf("%s\n", message);
-        printf("x : ");
-        scanf("%d", &p.x);
-        printf("y : ");
-        scanf("%d", &p.y);
+        choisir_case();
         /*recevoir le plateau (faire une structure ?)*/
         write(sockfd, (const char *)&p, sizeof(p));
     }
