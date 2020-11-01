@@ -35,6 +35,7 @@ void init_game(int plateau[])
 /* demande à l'utilisateur de choisir une case */
 Pion choisir_case()
 {
+    printf("Choisissez un pion !");
     Pion p;
     printf("coordonnée X : ");
     scanf("%d", &p.x);
@@ -51,6 +52,27 @@ Pion choisir_case()
         scanf("%d", &p.y);
     }
     return p;
+}
+
+void deplace_pion(Pion p, int plateau[]){
+    Pion temp;
+    printf("Saisir nouvelle coordonée X: ");
+    scanf("%d", &temp.x);
+    while (temp.x < 0 || temp.x > TAILLE)
+    {
+        printf("\nveuillez rentrer des coordonnées valides");
+        scanf("%d", &temp.x);
+    }
+    printf("Saisir nouvelle coordonnée Y : ");
+    scanf("%d", &temp.y);
+    while (temp.y < 0 || temp.y > TAILLE)
+    {
+        printf("\nveuillez entrer des coordonnées valides");
+        scanf("%d", &temp.y);
+    }
+    plateau[p.x][p.y]=VIDE;
+    plateau[temp.x][temp.y]=J1_PION;
+    afficher_plateau(plateau);
 }
 
 void indice(int taille)
