@@ -19,15 +19,9 @@ typedef struct pion
     int y;
 } Pion;
 
-typedef enum
-{
-    false,
-    true
-} Booleen;
-
-void init_game(int plateau[]);
-Pion choisir_case();
-void afficher_plateau(int plateau[]);
+void start(int plateau[]);
+Pion choisir_pion();
+void affiche_plateau(int plateau[]);
 
 static int nb_noir = 20;
 static int nb_blanc = 20;

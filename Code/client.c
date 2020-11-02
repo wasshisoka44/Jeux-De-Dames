@@ -40,12 +40,10 @@ int main(int argc, char *argv[])
     while (1)
     {
         recv(sockfd, &plateau, sizeof(plateau), 0);
-        afficher_plateau(plateau);
         recv(sockfd, &message, sizeof(message), 0);
         printf("%s\n", message);
-        p=choisir_case();
+        p=choisir_pion(plateau);
         deplace_pion(p,plateau);
-        /*recevoir le plateau (faire une structure ?)*/
         write(sockfd, (const char *)&p, sizeof(p));
     }
     close(sockfd);

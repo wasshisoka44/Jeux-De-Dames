@@ -62,7 +62,7 @@ int main(int argc, char *argv[])
 
     char buf[100] = "A vous de jouez ! ";
 
-    init_game(plateau);
+    start(plateau);
     while (1)
     {
         for (int i = 0; i < 2; i++)

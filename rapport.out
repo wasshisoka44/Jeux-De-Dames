@@ -4,3 +4,11 @@
 \BOOKMARK [2][-]{subsection.3.1}{Serveur}{section.3}% 4
 \BOOKMARK [2][-]{subsection.3.2}{Client}{section.3}% 5
 \BOOKMARK [2][-]{subsection.3.3}{Le jeu}{section.3}% 6
+\BOOKMARK [3][-]{subsubsection.3.3.1}{Constante pr\351d\351fini}{subsection.3.3}% 7
+\BOOKMARK [3][-]{subsubsection.3.3.2}{Le pion}{subsection.3.3}% 8
+\BOOKMARK [3][-]{subsubsection.3.3.3}{La fonction start}{subsection.3.3}% 9
+\BOOKMARK [3][-]{subsubsection.3.3.4}{La fonction choisir\137pion}{subsection.3.3}% 10
+\BOOKMARK [3][-]{subsubsection.3.3.5}{La fonction deplace\137pion}{subsection.3.3}% 11
+\BOOKMARK [3][-]{subsubsection.3.3.6}{La fonction affiche\137plateau}{subsection.3.3}% 12
+\BOOKMARK [3][-]{subsubsection.3.3.7}{La fonction game\137over}{subsection.3.3}% 13
+\BOOKMARK [1][-]{section.4}{Conclusion}{}% 14
