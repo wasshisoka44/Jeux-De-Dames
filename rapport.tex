@@ -10,7 +10,7 @@
 \usepackage{listings}
 
 
-\title{Rapport sur le jeu de damme}
+\title{Rapport sur le jeu de dame}
 \author{Wassim Saidane, Aurélien Authier}
 \date{}
 
@@ -22,22 +22,23 @@
     \newpage
     \pagenumbering{arabic}
     \section{Introduction}
+    Le but de ce projet était de modéliser un jeu de dame en réseau, où deux joueurs peuvent s'affronter, en respectant les règles du jeu, et peuvent être observé par une tierce personne. Nous devions donc mettre en place un serveur, un client, un protocole et, si le temps le permettait, un représentation graphique. 
 
     \section{Protocole choisis}
-        Nous avons choisis d'utiliser le protocole TCP car garantit l’émission ainsi que la réception de paquets de données.
+        Nous avons choisis d'utiliser le protocole TCP car il garantit l’émission ainsi que la réception de paquets de données.
     \section{Implémentation}
         Nous avons repris le code du TP5 permettant de d'établir un tchat avec les clients.
     \subsection{Serveur}
-    Le plateau et un objet de structure pion (voir 3.3.2) sont initialisé.
+    Le plateau et un objet de structure pion (voir 3.3.2) sont initialisés.
     \begin{lstlisting}
         int sockfd, len, connfd[2], plateau[TAILLE * TAILLE];
         Pion p;
     \end{lstlisting}
-    On demande aux clients le pion qu'ils veulent déplacer 
+    On demande aux clients le pion qu'ils veulent déplacer. 
     \begin{lstlisting}
         char buf[100] = "Quel pion voulez vous deplacer ? ";
     \end{lstlisting}
-    Le plateau est ensuite initialisé avec start, le message est envoyé au client et le serveur affiche le déplacement
+    Le plateau est ensuite initialisé avec start, le message est envoyé au client et le serveur affiche le déplacement.
     \begin{lstlisting}
         start(plateau);
         while (1)
@@ -56,12 +57,11 @@
 
     
     \subsection{Client}
-        Nous initialisons un message de taille 100 et un pion (voir 3.3.2)
+        Nous initialisons un message de taille 100 et un pion (voir 3.3.2).
         \begin{lstlisting}
             char message[100];
             Pion p;
         \end{lstlisting}
-        \newpage
             Le client va exécuter dans une boucle infini l'affichage du client.
             \begin{lstlisting}
                 while (1)
@@ -79,7 +79,7 @@
             si un joueurs n'a plus de pion.
     \subsection{Le jeu}
     \subsubsection{Constante prédéfini}
-    Pour afficher le plateau nous affichons des simples nombres.
+    Pour afficher le plateau nous affichons des nombres simples.
     \begin{lstlisting}
         #define J2_PION 2
         #define J2_DAME 4
@@ -100,9 +100,8 @@
         } Pion;
     \end{lstlisting}
     Lorsqu'un pion devient dame il reste un pion. 
-    \newpage
     \subsubsection{La fonction start}
-        La fonction start va initialiser le plateau qui est un tableau en 2 dimenssion en fonction de la taille.
+        La fonction start va initialiser le plateau qui est un tableau en 2 dimension en fonction de la taille.
         On initialise le plateau avec des cases vides puis on place les pions. 
     \begin{lstlisting}
         void start(int plateau[])
@@ -136,7 +135,7 @@
     \end{lstlisting}
     \newpage
     \subsubsection{La fonction choisir\_pion}
-    Cette fonction prend un plateau en paramétre et permet au choisir un pion avec les coordonnées x et y.
+    Cette fonction prend un plateau en paramètre et permet au joueur de choisir un pion avec les coordonnées x et y.
     La fonction retourne un pion.
     \begin{lstlisting}
         Pion choisir_pion(int plateau[])
@@ -163,8 +162,8 @@
     \end{lstlisting}
     \newpage
     \subsubsection{La fonction deplace\_pion}
-    La fonction prend un paramétre un pion et un plateau. On crée un pion temporaire afin de ne pas écraser le pion principale.
-    Ensuite les coordonée du pion sont effacé pour être remplacé par le pion temporaire (cette section de code est en commentaire car elle ne fonctionne pas).
+    La fonction prend un paramètre un pion et un plateau. On crée un pion temporaire afin de ne pas écraser le pion principale.
+    Ensuite les coordonnées du pion sont effacées pour être remplacées par celles du pion temporaire (cette section de code est en commentaire car elle ne fonctionne pas).
     \begin{lstlisting}
         void deplace_pion(Pion p, int plateau[]){
         Pion temp;
@@ -218,5 +217,5 @@
         }
     \end{lstlisting}
     \section{Conclusion}
-    Le projet n'étant pas terminé, le code ne fonctionne que pour deux joueurs et le joueurs peut seulement demander le pion qu'il souhaite déplacer et entrez ces nouvelles coordonées
+    Le projet n'étant pas terminé, le code ne fonctionne que pour deux joueurs et le joueur peut seulement demander le pion qu'il souhaite déplacer et entrer ses nouvelles coordonnées
 \end{document}
